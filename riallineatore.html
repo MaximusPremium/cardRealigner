@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muffin time</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            /*eight: 100vh;*/
+            margin-top: 10%;
+            background-color: #f4f4f9;
+        }
+        .container {
+            text-align: center;
+            margin: auto;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+            border: 2px solid #ccc;
+            transition: transform 0.3s ease;
+        }
+        .sliders {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="range"] {
+            width: 200px;
+        
+        }
+        #image-container {
+            position: relative;
+            height: 880px;
+            width: 635px;
+        }
+        #image-container2 {
+            height: 880px;
+            width: 635px;
+            border: solid 1px;
+            z-index: 5;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <input type="file" id="file-input" multiple accept="image/*">
+    <div id="image-container">
+        <div id="image-container2"></div>
+    </div>
+
+    <div class="container">
+        <h1>Image Skew with Sliders</h1>
+        <div class="sliders">
+            <label for="skewX">Skew X:</label>
+            <input type="range" id="skewX" min="-45" max="45" value="0">
+            <label for="skewY">Skew Y:</label>
+            <input type="range" id="skewY" min="-45" max="45" value="0">
+            <label for="scale">Scale:</label>
+            <input type="range" id="scale" min="0.2" max="10" step="0.1" value="1">
+            <label for="rotate">Rotate:</label>
+            <input type="range" id="rotate" min="0" max="360" value="0">
+            <label for="translateX">Move X:</label>
+            <input type="range" id="translateX" min="-1000" max="1000" value="0">
+            <label for="translateY">Move Y:</label>
+            <input type="range" id="translateY" min="-1000" max="1000" value="0">
+        </div>
+    </div>
+
+    <script>
+        let image = new Image()
+        const fileInput = document.getElementById('file-input');
+        const imageContainer = document.getElementById('image-container');
+
+        fileInput.addEventListener('change', (event) => {
+            const files = event.target.files;
+            //imageContainer.innerHTML = ''; // Clear previous images
+
+            for (const file of files) {
+                if (file.type.startsWith('image/')) {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = URL.createObjectURL(file);
+                    imgElement.alt = 'alt'+file.name;
+                    imgElement.id = 'skewimg'
+                    image = imgElement
+                    imageContainer.appendChild(imgElement);
+                }
+            }
+        });
+
+        
+        //const image = document.getElementById('skewimg')
+        const skewXSlider = document.getElementById('skewX');
+        const skewYSlider = document.getElementById('skewY');
+        const scaleSlider = document.getElementById('scale');
+        const rotateSlider = document.getElementById('rotate');
+        const translateXSlider = document.getElementById('translateX');
+        const translateYSlider = document.getElementById('translateY');
+
+        function updateTransform() {
+            const skewX = skewXSlider.value;
+            const skewY = skewYSlider.value;
+            const scale = scaleSlider.value;
+            const rotate = rotateSlider.value;
+            const translateX = translateXSlider.value;
+            const translateY = translateYSlider.value;
+            image.style.transform = `skew(${skewX}deg, ${skewY}deg) scale(${scale}) rotate(${rotate}deg) translate(${translateX}px, ${translateY}px)`;
+        }
+    
+        skewXSlider.addEventListener('input', updateTransform);
+        skewYSlider.addEventListener('input', updateTransform);
+        scaleSlider.addEventListener('input', updateTransform);
+        rotateSlider.addEventListener('input', updateTransform);
+        translateXSlider.addEventListener('input', updateTransform);
+        translateYSlider.addEventListener('input', updateTransform);
+    </script>
+
+</body>
+</html>
